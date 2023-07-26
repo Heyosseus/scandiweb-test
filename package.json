@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@vee-validate/rules": "^4.10.8",
+    "vee-validate": "^4.5.11"
+  }
+}
