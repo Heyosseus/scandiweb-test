@@ -165,27 +165,36 @@
 <script setup>
 import { Form, Field, ErrorMessage } from 'vee-validate'
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 import axios from 'axios'
 
+const router = useRouter()
 const sku = ref('')
 const name = ref('')
 const price = ref('')
 
 const selectedProductType = ref('')
 
-const addProduct = () => {
-  axios
-    .post('http://localhost:3000/api/api.php', {
-      action: 'addProducts',
-      sku: sku.value,
-      name: name.value,
-      price: price.value
+const addProduct = async () => {
+  const formData = {
+    action: 'addProducts',
+    sku: sku.value,
+    name: name.value,
+    price: parseFloat(price.value)
+  };
+
+  await axios
+    .post('http://localhost:3000/api/action.php', formData, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
     })
     .then((response) => {
-      console.log(response.data)
+      router.push({ name: 'home' });
+      console.log(response);
     })
     .catch((error) => {
-      console.error(error.response.data)
-    })
-}
+      console.error(error.response.data);
+    });
+};
 </script>

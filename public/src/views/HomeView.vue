@@ -1,5 +1,5 @@
 <template>
-  <div class="py-10 px-16">
+  <div class="py-10 px-20">
     <div class="flex justify-between items-center px-4">
       <h1 class="text-4xl text-green-400">Product List</h1>
       <div class="flex space-x-8">
@@ -10,19 +10,25 @@
         >
         <button
           class="uppercase py-2 px-4 border border-white rounded-md hover:bg-red-700 hover:border-0"
+          @click="deleteSelectedProducts"
         >
           mass delete
         </button>
       </div>
     </div>
     <div class="w-full h-[1px] bg-gray-400 mt-4"></div>
-    <main class="flex flex-wrap justify-start space-x-16 w-full">
+    <main class="flex flex-wrap justify-start w-full">
       <div
         v-for="product in products"
         :key="product.id"
-        class="w-1/6 pb-12 pt-8 bg-gray-600 mt-10 rounded-lg text-xl text-center flex justify-center items-center relative"
+        class="w-1/5 ml-16 pb-12 pt-8 bg-gray-600 mt-10 rounded-lg text-xl text-center flex justify-center items-center relative"
       >
-        <input type="checkbox" class="absolute top-4 left-4 w-5 h-5" />
+        <input
+          type="checkbox"
+          class="absolute top-4 left-4 w-5 h-5"
+          v-model="selectedProducts"
+          :value="product.id"
+        />
         <div>
           <p>{{ product.sku }}</p>
           <p>{{ product.name }}</p>
@@ -37,12 +43,12 @@
   </div>
 </template>
 <script setup>
-// import { Field, ErrorMessage } from 'vee-validate'
 import { ref, onMounted } from 'vue'
 import axios from 'axios'
 
 const products = ref([])
 const loading = ref(true)
+const selectedProducts = ref([])
 
 onMounted(async () => {
   try {
@@ -56,4 +62,30 @@ onMounted(async () => {
     loading.value = false
   }
 })
+
+const deleteSelectedProducts = async () => {
+  const selectedProductIds = selectedProducts.value
+
+  if (selectedProductIds.length === 0) {
+    console.log('No products selected for deletion.')
+    return
+  }
+
+  const formData = {
+    action: 'deleteProducts',
+    productIds: selectedProductIds
+  }
+
+  try {
+    const response = await axios.post('http://localhost:3000/api/action.php', formData, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+
+    console.log(response.data)
+  } catch (error) {
+    console.error(error.response.data)
+  }
+}
 </script>
