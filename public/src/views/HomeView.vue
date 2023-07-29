@@ -80,7 +80,6 @@ const deleteSelectedProducts = async () => {
         'Content-Type': 'application/json'
       }
     })
-    // products.value = products.value.filter((product) => !selectedProductIds.includes(product.id))
     productStore.deleteSelectedProducts(selectedProductIds)
   } catch (error) {
     console.error(error.response.data)
