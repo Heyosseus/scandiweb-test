@@ -21,7 +21,7 @@
       <div
         v-for="product in productStore.items"
         :key="product.id"
-        class="w-1/5 ml-16 pb-12 pt-8 bg-gray-600 mt-10 rounded-lg text-xl text-center flex justify-center items-center relative"
+        class="w-1/5 ml-16 pb-12 pt-8 bg-gray-600 mt-10 rounded-lg text-xl text-center flex justify-center items-center relative shadow-lg shadow-gray-950"
       >
         <input
           type="checkbox"
@@ -53,7 +53,7 @@ const productStore = useProductStore()
 
 onMounted(async () => {
   try {
-    const response = await axios.get('http://localhost:3000/api/all.php?action=fetchall')
+    const response = await axios.get('http://localhost:3000/api/requests/all.php?action=getProducts')
     products.value = response.data
     productStore.items = response.data
     console.log(productStore.items)

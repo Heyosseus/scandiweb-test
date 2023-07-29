@@ -184,7 +184,7 @@ const addProduct = async () => {
   };
 
   await axios
-    .post('http://localhost:3000/api/action.php', formData, {
+    .post('http://localhost:3000/api/requests/action.php', formData, {
       headers: {
         'Content-Type': 'application/json'
       }
