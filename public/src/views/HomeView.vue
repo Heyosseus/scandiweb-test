@@ -19,7 +19,7 @@
     <div class="w-full h-[1px] bg-gray-400 mt-4"></div>
     <main class="flex flex-wrap justify-start w-full">
       <div
-        v-for="product in products"
+        v-for="product in productStore.items"
         :key="product.id"
         class="w-1/5 ml-16 pb-12 pt-8 bg-gray-600 mt-10 rounded-lg text-xl text-center flex justify-center items-center relative"
       >
@@ -44,22 +44,21 @@
 </template>
 <script setup>
 import { ref, onMounted } from 'vue'
+import { useProductStore } from '@/stores/products'
 import axios from 'axios'
 
 const products = ref([])
-const loading = ref(true)
 const selectedProducts = ref([])
+const productStore = useProductStore()
 
 onMounted(async () => {
   try {
     const response = await axios.get('http://localhost:3000/api/all.php?action=fetchall')
     products.value = response.data
-    console.log(response)
-
-    loading.value = false
+    productStore.items = response.data
+    console.log(productStore.items)
   } catch (error) {
     console.error(error)
-    loading.value = false
   }
 })
 
@@ -67,7 +66,6 @@ const deleteSelectedProducts = async () => {
   const selectedProductIds = selectedProducts.value
 
   if (selectedProductIds.length === 0) {
-    console.log('No products selected for deletion.')
     return
   }
 
@@ -77,13 +75,13 @@ const deleteSelectedProducts = async () => {
   }
 
   try {
-    const response = await axios.post('http://localhost:3000/api/action.php', formData, {
+    await axios.post('http://localhost:3000/api/action.php', formData, {
       headers: {
         'Content-Type': 'application/json'
       }
     })
-
-    console.log(response.data)
+    // products.value = products.value.filter((product) => !selectedProductIds.includes(product.id))
+    productStore.deleteSelectedProducts(selectedProductIds)
   } catch (error) {
     console.error(error.response.data)
   }

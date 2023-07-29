@@ -28,7 +28,7 @@
               id="sku"
               placeholder="sku"
               class="p-2 rounded-lg border-none outline-none text-black ml-auto w-input"
-              rules="required"
+              rules="required|max:15"
               v-model="sku"
             />
             <ErrorMessage name="sku" class="text-sm text-red-600 mt-2" />
@@ -44,7 +44,7 @@
               id="name"
               placeholder="name"
               class="p-2 rounded-lg border-none outline-none text-black w-input"
-              rules="required"
+              rules="required|max:15"
               v-model="name"
             />
             <ErrorMessage name="name" class="text-sm text-red-600 mt-2" />
