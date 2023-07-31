@@ -1,0 +1,25 @@
+<template>
+  <div class="flex justify-between items-center px-4">
+    <h1 class="text-4xl text-green-400">Product Add</h1>
+    <div class="flex space-x-8">
+      <button
+        class="uppercase py-2 px-4 border border-white rounded-md hover:bg-blue-600 hover:border-0"
+        type="submit"
+      >
+        {{ props.save }}
+      </button>
+      <router-link
+        :to="{ name: 'home' }"
+        class="uppercase py-2 px-4 border border-white rounded-md hover:bg-gray-600 hover:border-0"
+        >{{ props.cancel }}</router-link
+      >
+    </div>
+  </div>
+</template>
+<script setup>
+const props = defineProps({
+  save: String,
+  cancel: String,
+  addProduct: Function
+})
+</script>
