@@ -1,0 +1,10 @@
+{
+  "autoload": {
+    "psr-4": {
+      "config\\": "config/",
+      "cors\\": "cors/",
+      "database\\": "database/",
+      "requests\\": "requests/"
+    }
+  }
+}
