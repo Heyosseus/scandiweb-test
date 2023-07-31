@@ -1,4 +1,6 @@
 <?php
+namespace database;
+
 class DatabaseSettings
 {
     var $settings;

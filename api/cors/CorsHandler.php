@@ -1,5 +1,7 @@
 <?php
 
+namespace cors;
+
 class CorsHandler
 {
     public function handleCors()

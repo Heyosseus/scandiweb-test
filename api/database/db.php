@@ -1,15 +1,6 @@
 <?php
-// function OpenCon()
-// {
-//     $dbhost = "localhost";
-//     $dbuser = "rati";
-//     $dbpass = "";
-//     $db = "test";
-//     $conn = new mysqli($dbhost, $dbuser, $dbpass, $db);
-
-//     return $conn;
-// }
-// $conn = OpenCon();
+namespace database;
+use mysqli;
 require_once "DBSettings.php";
 
 class DB extends DatabaseSettings
