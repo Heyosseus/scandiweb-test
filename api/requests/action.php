@@ -1,40 +1,35 @@
 <?php
+
+namespace requests;
+
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 ini_set('log_errors', 1);
 ini_set('error_log', '/path/to/error_log.txt');
 
-require_once "../database/db.php";
-require_once "../cors/CorsHandler.php";
+
+require_once "../config/autoloader.php";
+
+use database\db;
+use requests\CreateRequestHandler;
+use requests\DeleteRequestHandler;
+use cors\CorsHandler;
 
 $corsHandler = new CorsHandler();
 $corsHandler->handleCors();
 
-class RequestHandler
+abstract class RequestHandler
 {
-    private $connection;
+    protected $connection;
 
     public function __construct()
     {
         $this->connection = new DB();
     }
 
-    public function handleRequest()
-    {
-        $requestMethod = $_SERVER['REQUEST_METHOD'];
-        switch ($requestMethod) {
-            case 'POST':
-                $this->handlePostRequest();
-                break;
-            default:
-                echo 'Invalid request method.';
-                break;
-        }
+    abstract public function handleRequest();
 
-        $this->connection->close();
-    }
-
-    private function handlePostRequest()
+    protected function create()
     {
         $data = json_decode(file_get_contents('php://input'), true);
 
@@ -45,28 +40,40 @@ class RequestHandler
 
             $sql = "INSERT INTO `products` (`sku`, `name`, `price`) VALUES ('$sku', '$name', '$price');";
 
-            if ($this->connection->link->query($sql)) {
-                echo "New record created successfully";
-            } else {
-                echo "Error: " . $sql . "<br>" . $this->connection->link->error;
-            }
-        } else if (isset($data['action']) && $data['action'] === 'deleteProducts' && isset($data['productIds'])) {
+            $data = $this->connection->link->query($sql);
+
+            return $data;
+        }
+    }
+
+    protected function delete()
+    {
+        $data = json_decode(file_get_contents('php://input'), true);
+
+        if (isset($data['action']) && $data['action'] === 'deleteProducts' && isset($data['productIds'])) {
             $productIds = $data['productIds'];
             $productIds = array_map('intval', $productIds);
 
             $productIdList = implode(',', $productIds);
             $sql = "DELETE FROM `products` WHERE `id` IN ($productIdList)";
 
-            if ($this->connection->link->query($sql)) {
-                echo count($productIds) . " records deleted successfully";
-            } else {
-                echo "Error: " . $sql . "<br>" . $this->connection->link->error;
-            }
-        } else {
-            echo "Error: Invalid data format.";
+            $data = $this->connection->link->query($sql);
+
+            return $data;
         }
     }
 }
 
-$requestHandler = new RequestHandler();
+$requestMethod = $_SERVER['REQUEST_METHOD'];
+switch ($requestMethod) {
+    case 'POST':
+        $requestHandler = new CreateRequestHandler();
+        break;
+    case 'DELETE':
+        $requestHandler = new DeleteRequestHandler();
+        break;
+    default:
+        echo 'Invalid request method.';
+        exit();
+}
 $requestHandler->handleRequest();
