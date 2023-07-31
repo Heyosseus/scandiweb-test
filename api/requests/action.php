@@ -11,8 +11,6 @@ ini_set('error_log', '/path/to/error_log.txt');
 require_once "../config/autoloader.php";
 
 use database\db;
-use requests\CreateRequestHandler;
-use requests\DeleteRequestHandler;
 use cors\CorsHandler;
 
 $corsHandler = new CorsHandler();
@@ -67,10 +65,10 @@ abstract class RequestHandler
 $requestMethod = $_SERVER['REQUEST_METHOD'];
 switch ($requestMethod) {
     case 'POST':
-        $requestHandler = new CreateRequestHandler();
+        $requestHandler = new \requests\crud\CreateRequestHandler();
         break;
     case 'DELETE':
-        $requestHandler = new DeleteRequestHandler();
+        $requestHandler = new \requests\crud\DeleteRequestHandler();
         break;
     default:
         echo 'Invalid request method.';

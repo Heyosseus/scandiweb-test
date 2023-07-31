@@ -1,6 +1,8 @@
 <?php
 
-namespace requests;
+namespace requests\crud;
+
+use requests\RequestHandler;
 
 class DeleteRequestHandler extends RequestHandler
 {

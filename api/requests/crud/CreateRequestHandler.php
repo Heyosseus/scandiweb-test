@@ -1,5 +1,8 @@
 <?php
-namespace requests;
+
+namespace requests\crud;
+
+use requests\RequestHandler;
 
 class CreateRequestHandler extends RequestHandler
 {
