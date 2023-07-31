@@ -1,24 +1,9 @@
 <template>
-  <div class="py-10 px-16">
-    <div class="flex justify-between items-center px-4">
-      <h1 class="text-4xl text-green-400">Product Add</h1>
-      <div class="flex space-x-8">
-        <button
-          class="uppercase py-2 px-4 border border-white rounded-md hover:bg-blue-600 hover:border-0"
-          @click="addProduct"
-        >
-          save
-        </button>
-        <router-link
-          :to="{ name: 'home' }"
-          class="uppercase py-2 px-4 border border-white rounded-md hover:bg-gray-600 hover:border-0"
-          >cancel</router-link
-        >
-      </div>
-    </div>
+  <Form @submit="addProduct" class="py-10 px-16">
+    <base-header save="save" cancel="cancel" :addProducty="addProduct"></base-header>
     <div class="w-full h-[1px] bg-gray-400 mt-4"></div>
     <div class="flex justify-between" @submit.prevent>
-      <Form class="w-inputs space-y-10 mt-12">
+      <div class="w-inputs space-y-10 mt-12">
         <div class="flex">
           <label for="sku">SKU</label>
           <div class="flex flex-col ml-auto">
@@ -27,7 +12,7 @@
               type="text"
               id="sku"
               placeholder="sku"
-              class="p-2 rounded-lg border-none outline-none text-black ml-auto w-input"
+              class="p-2 rounded-lg border-none outline-none text-black ml-auto w-input uppercase"
               rules="required|max:15"
               v-model="sku"
             />
@@ -68,19 +53,22 @@
         </div>
         <div>
           <label for="">Type switcher:</label>
-          <select
-            name=""
+          <Field
+            name="selector"
+            as="select"
             id="productType"
             class="ml-10 p-2 bg-transparent"
             v-model="selectedProductType"
+        
           >
             <option value="" disabled class="bg-primary text-white">Select product type</option>
             <option value="DVD" class="bg-primary text-white">DVD</option>
             <option value="Book" class="bg-primary text-white">Book</option>
             <option value="Furniture" class="bg-primary text-white">Furniture</option>
-          </select>
+          </Field>
+          <ErrorMessage name="selector" class="text-sm text-red-600 mt-2 ml-6" />
         </div>
-      </Form>
+      </div>
       <div>
         <div class="w-content bg-gray-950 h-contentH mt-12 rounded-lg drop-shadow-lg">
           <div class="p-10">
@@ -160,10 +148,11 @@
       <div class="w-[94%] h-[1px] bg-gray-400 mt-4"></div>
       <p class="flex justify-center items-center text-lg mt-2">Scandiweb Test Assignment</p>
     </footer>
-  </div>
+  </Form>
 </template>
 <script setup>
 import { Form, Field, ErrorMessage } from 'vee-validate'
+import BaseHeader from '../components/layout/BaseHeader.vue'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import axios from 'axios'
@@ -181,7 +170,7 @@ const addProduct = async () => {
     sku: sku.value,
     name: name.value,
     price: parseFloat(price.value)
-  };
+  }
 
   await axios
     .post('http://localhost:3000/api/requests/action.php', formData, {
@@ -189,12 +178,11 @@ const addProduct = async () => {
         'Content-Type': 'application/json'
       }
     })
-    .then((response) => {
-      router.push({ name: 'home' });
-      console.log(response);
+    .then(() => {
+      router.push({ name: 'home' })
     })
     .catch((error) => {
-      console.error(error.response.data);
-    });
-};
+      console.error(error.response.data)
+    })
+}
 </script>
