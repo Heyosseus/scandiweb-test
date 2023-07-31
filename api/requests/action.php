@@ -26,40 +26,6 @@ abstract class RequestHandler
     }
 
     abstract public function handleRequest();
-
-    protected function create()
-    {
-        $data = json_decode(file_get_contents('php://input'), true);
-
-        if (isset($data['sku']) && isset($data['name']) && isset($data['price'])) {
-            $sku = $data['sku'];
-            $name = $data['name'];
-            $price = $data['price'];
-
-            $sql = "INSERT INTO `products` (`sku`, `name`, `price`) VALUES ('$sku', '$name', '$price');";
-
-            $data = $this->connection->link->query($sql);
-
-            return $data;
-        }
-    }
-
-    protected function delete()
-    {
-        $data = json_decode(file_get_contents('php://input'), true);
-
-        if (isset($data['action']) && $data['action'] === 'deleteProducts' && isset($data['productIds'])) {
-            $productIds = $data['productIds'];
-            $productIds = array_map('intval', $productIds);
-
-            $productIdList = implode(',', $productIds);
-            $sql = "DELETE FROM `products` WHERE `id` IN ($productIdList)";
-
-            $data = $this->connection->link->query($sql);
-
-            return $data;
-        }
-    }
 }
 
 $requestMethod = $_SERVER['REQUEST_METHOD'];
