@@ -1,13 +1,9 @@
 <?php
 
 namespace requests;
-
-error_reporting(E_ALL);
 ini_set('display_errors', 1);
-ini_set('log_errors', 1);
-ini_set('error_log', '/path/to/error_log.txt');
-
-
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 require_once "../config/autoloader.php";
 
 use database\db;
@@ -27,11 +23,27 @@ abstract class RequestHandler
 
     abstract public function handleRequest();
 }
-
-$requestMethod = $_SERVER['REQUEST_METHOD'];
-switch ($requestMethod) {
+switch ($_SERVER['REQUEST_METHOD']) {
     case 'POST':
-        $requestHandler = new \requests\crud\CreateRequestHandler();
+        $data = json_decode(file_get_contents('php://input'), true);
+        if (!isset($data['type'])) {
+            echo 'Invalid request. Product type is missing.';
+            exit();
+        }
+        switch ($data['type']) {
+            case 'Book':
+                $requestHandler = new \requests\products\BookProduct($connection, $corsHandler);
+                break;
+            case 'DVD':
+                $requestHandler = new \requests\products\DVDProduct($connection, $corsHandler);
+                break;
+            case 'Furniture':
+                $requestHandler = new \requests\products\FurnitureProduct($connection, $corsHandler);
+                break;
+            default:
+                echo 'Invalid product type.';
+                exit();
+        }
         break;
     case 'DELETE':
         $requestHandler = new \requests\crud\DeleteRequestHandler();

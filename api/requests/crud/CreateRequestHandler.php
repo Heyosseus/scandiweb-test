@@ -4,8 +4,12 @@ namespace requests\crud;
 
 use requests\RequestHandler;
 
-class CreateRequestHandler extends RequestHandler
+abstract class CreateRequestHandler extends RequestHandler
 {
+    abstract protected function getProductType();
+
+    abstract protected function getProductAttributes(array $data);
+
     public function handleRequest()
     {
         $data = json_decode(file_get_contents('php://input'), true);
@@ -14,12 +18,24 @@ class CreateRequestHandler extends RequestHandler
             $sku = $data['sku'];
             $name = $data['name'];
             $price = $data['price'];
+            $type = $this->getProductType();
 
-            $sql = "INSERT INTO `products` (`sku`, `name`, `price`) VALUES ('$sku', '$name', '$price');";
+            $productAttributes = $this->getProductAttributes($data);
 
-            $data = $this->connection->link->query($sql);
+            $sql = "INSERT INTO `products` (`sku`, `name`, `price`, `type`, ";
+            $values = "VALUES ('$sku', '$name', '$price', '$type', ";
 
-            return $data;
+            foreach ($productAttributes as $attributeName => $attributeValue) {
+                $sql .= "`$attributeName`, ";
+                $values .= "'$attributeValue', ";
+            }
+
+            $sql = rtrim($sql, ', ') . ') ';
+            $values = rtrim($values, ', ') . ');';
+
+            $sql .= $values;
+
+            $this->connection->link->query($sql);
         }
 
         $this->connection->close();
