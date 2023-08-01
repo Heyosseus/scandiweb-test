@@ -6,7 +6,7 @@ defineRule('max', max)
 
 defineRule('number', (value) => {
   if (!/^[0-9]+$/.test(value)) {
-    return 'This field must be number'
+    return 'Please enter only numbers'
   }
   return true
 })
