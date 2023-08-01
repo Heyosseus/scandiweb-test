@@ -3,72 +3,16 @@
     <base-header save="save" cancel="cancel" :addProducty="addProduct"></base-header>
     <div class="w-full h-[1px] bg-gray-400 mt-4"></div>
     <div class="flex justify-between" @submit.prevent>
-      <div class="w-inputs space-y-10 mt-12">
-        <div class="flex">
-          <label for="sku">SKU</label>
-          <div class="flex flex-col ml-auto">
-            <Field
-              name="sku"
-              type="text"
-              id="sku"
-              placeholder="sku"
-              class="p-2 rounded-lg border-none outline-none text-black ml-auto w-input uppercase"
-              rules="required|max:15"
-              v-model="sku"
-            />
-            <ErrorMessage name="sku" class="text-sm text-red-600 mt-2" />
-          </div>
-        </div>
-
-        <div class="flex">
-          <label for="">Name</label>
-          <div class="flex flex-col ml-auto">
-            <Field
-              name="name"
-              type="text"
-              id="name"
-              placeholder="name"
-              class="p-2 rounded-lg border-none outline-none text-black w-input"
-              rules="required|max:15"
-              v-model="name"
-            />
-            <ErrorMessage name="name" class="text-sm text-red-600 mt-2" />
-          </div>
-        </div>
-
-        <div class="flex">
-          <label for="">Price ($)</label>
-          <div class="flex flex-col ml-auto">
-            <Field
-              name="price"
-              type="number"
-              id="price"
-              placeholder="price"
-              class="p-2 rounded-lg border-none outline-none text-black ml-auto w-input"
-              rules="required|number"
-              v-model="price"
-            />
-            <ErrorMessage name="price" class="text-sm text-red-600 mt-2" />
-          </div>
-        </div>
-        <div>
-          <label for="">Type switcher:</label>
-          <Field
-            name="selector"
-            as="select"
-            id="productType"
-            class="ml-10 p-2 bg-transparent"
-            v-model="selectedProductType"
-        
-          >
-            <option value="" disabled class="bg-primary text-white">Select product type</option>
-            <option value="DVD" class="bg-primary text-white">DVD</option>
-            <option value="Book" class="bg-primary text-white">Book</option>
-            <option value="Furniture" class="bg-primary text-white">Furniture</option>
-          </Field>
-          <ErrorMessage name="selector" class="text-sm text-red-600 mt-2 ml-6" />
-        </div>
-      </div>
+      <input-data
+        :sku="sku"
+        :name="name"
+        :price="price"
+        :selectedProductType="selectedProductType"
+        @update:sku="sku = $event"
+        @update:name="name = $event"
+        @update:price="price = $event"
+        @update:selectedProductType="selectedProductType = $event"
+      ></input-data>
       <div>
         <div class="w-content bg-gray-950 h-contentH mt-12 rounded-lg drop-shadow-lg">
           <div class="p-10">
@@ -81,8 +25,9 @@
                 placeholder="size"
                 class="p-2 rounded-lg border-none outline-none text-black ml-10 w-input"
                 rules="required|number"
+                v-model="size"
               />
-              <ErrorMessage name="size" class="text-sm text-red-600 mt-2" />
+              <ErrorMessage name="size" class="text-sm block text-red-600 mt-4" />
 
               <p class="text-sm mt-4 text-gray-300">*Please, provide disc space in MB</p>
             </div>
@@ -94,8 +39,11 @@
                 id="weight"
                 placeholder="weight"
                 class="p-2 rounded-lg border-none outline-none text-black ml-10 w-input"
-                rules="number"
+                rules="required|number"
+                v-model="weight"
               />
+              <ErrorMessage name="weight" class="text-sm block text-red-600 mt-4" />
+
               <p class="text-sm mt-4 text-gray-300">*Please, provide weight in KG</p>
             </div>
             <div
@@ -110,8 +58,10 @@
                   id="height"
                   placeholder="height"
                   class="p-2 rounded-lg border-none outline-none text-black ml-9 w-input"
-                  rules="number"
+                  rules="required|number"
+                  v-model="height"
                 />
+                <ErrorMessage name="height" class="text-sm block text-red-600 mt-4" />
               </div>
               <div>
                 <label for="width">Width (cm)</label>
@@ -121,8 +71,10 @@
                   id="width"
                   placeholder="width"
                   class="p-2 rounded-lg border-none outline-none text-black ml-10 w-input"
-                  rules="number"
+                  rules="required|number"
+                  v-model="width"
                 />
+                <ErrorMessage name="width" class="text-sm block text-red-600 mt-4" />
               </div>
               <div>
                 <label for="length">Length (cm)</label>
@@ -132,13 +84,16 @@
                   id="length"
                   placeholder="length"
                   class="p-2 rounded-lg border-none outline-none text-black ml-8 w-input"
-                  rules="number"
+                  rules="required|number"
+                  v-model="length"
                 />
+                <ErrorMessage name="length" class="text-sm block text-red-600 mt-4" />
+
                 <p class="text-sm mt-6 text-gray-300">*Please, provide dimensions in CM</p>
               </div>
             </div>
 
-            <p v-else class="text-center text-lg">No selected type yet</p>
+            <p v-else class="text-center text-lg">Product type is not selected yet</p>
           </div>
         </div>
       </div>
@@ -152,7 +107,8 @@
 </template>
 <script setup>
 import { Form, Field, ErrorMessage } from 'vee-validate'
-import BaseHeader from '../components/layout/BaseHeader.vue'
+import BaseHeader from '@/components/layout/BaseHeader.vue'
+import InputData from '@/components/InputData.vue'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import axios from 'axios'
@@ -161,7 +117,11 @@ const router = useRouter()
 const sku = ref('')
 const name = ref('')
 const price = ref('')
-
+const size = ref('')
+const weight = ref('')
+const height = ref('')
+const width = ref('')
+const length = ref('')
 const selectedProductType = ref('')
 
 const addProduct = async () => {
@@ -169,7 +129,17 @@ const addProduct = async () => {
     action: 'addProducts',
     sku: sku.value,
     name: name.value,
-    price: parseFloat(price.value)
+    price: parseFloat(price.value),
+    type: selectedProductType.value
+  }
+  if (selectedProductType.value === 'DVD') {
+    formData.size = parseFloat(size.value)
+  } else if (selectedProductType.value === 'Book') {
+    formData.weight = parseFloat(weight.value)
+  } else if (selectedProductType.value === 'Furniture') {
+    formData.height = parseFloat(height.value)
+    formData.width = parseFloat(width.value)
+    formData.length = parseFloat(length.value)
   }
 
   await axios
@@ -182,7 +152,7 @@ const addProduct = async () => {
       router.push({ name: 'home' })
     })
     .catch((error) => {
-      console.error(error.response.data)
+      console.error(error.response)
     })
 }
 </script>
