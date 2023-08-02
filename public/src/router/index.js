@@ -10,11 +10,10 @@ const router = createRouter({
       component: HomeView
     },
     {
-      path: '/add-products',
+      path: '/add-product',
       name: 'add-products',
       component: AddProductsView
     }
   ]
 })
-
 export default router
