@@ -3,6 +3,7 @@
 namespace requests\products;
 
 use requests\crud\CreateRequestHandler;
+use models\Product;
 
 class DVDProduct extends CreateRequestHandler
 {
@@ -16,5 +17,9 @@ class DVDProduct extends CreateRequestHandler
         return [
             'size' => $data['size']
         ];
+    }
+    protected function createProductInstance()
+    {
+        return new Product();
     }
 }

@@ -3,6 +3,7 @@
 namespace requests\products;
 
 use requests\crud\CreateRequestHandler;
+use models\Product;
 
 class FurnitureProduct extends CreateRequestHandler
 {
@@ -21,5 +22,9 @@ class FurnitureProduct extends CreateRequestHandler
         return [
             'dimensions' => json_encode($dimensions)
         ];
+    }
+    protected function createProductInstance()
+    {
+        return new Product();
     }
 }

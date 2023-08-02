@@ -3,6 +3,7 @@
 namespace requests\products;
 
 use requests\crud\CreateRequestHandler;
+use models\Product;
 
 class BookProduct extends CreateRequestHandler
 {
@@ -16,5 +17,9 @@ class BookProduct extends CreateRequestHandler
         return [
             'weight' => $data['weight']
         ];
+    }
+    protected function createProductInstance()
+    {
+        return new Product();
     }
 }
