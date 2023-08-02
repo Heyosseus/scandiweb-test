@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="w-content bg-gray-950 h-contentH mt-12 rounded-lg drop-shadow-lg">
+    <div class="w-full lg:w-content bg-gray-950 h-96 lg:h-contentH mt-12 rounded-lg drop-shadow-lg">
       <div class="p-10">
         <div v-if="selectedProductType === 'DVD'" class="">
           <label for="size">Size (mb)</label>

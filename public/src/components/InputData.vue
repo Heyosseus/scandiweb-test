@@ -1,5 +1,5 @@
 <template>
-  <div class="w-inputs space-y-10 mt-12">
+  <div class="w-full lg:w-inputs space-y-10 mt-12">
     <div class="flex">
       <label for="sku">SKU</label>
       <div class="flex flex-col ml-auto">
@@ -8,7 +8,7 @@
           type="text"
           id="sku"
           placeholder="sku"
-          class="p-2 rounded-lg border-none outline-none text-black ml-auto w-input uppercase"
+          class="p-2 rounded-lg border-none outline-none text-black ml-auto w-fit lg:w-input uppercase"
           rules="required|max:15"
           :value="props.sku"
           @input="$emit('update:sku', $event.target.value)"
@@ -25,7 +25,7 @@
           type="text"
           id="name"
           placeholder="name"
-          class="p-2 rounded-lg border-none outline-none text-black w-input"
+          class="p-2 rounded-lg border-none outline-none text-black w-fit lg:w-input"
           rules="required|max:15"
           :value="props.name"
           @input="$emit('update:name', $event.target.value)"
@@ -42,7 +42,7 @@
           type="number"
           id="price"
           placeholder="price"
-          class="p-2 rounded-lg border-none outline-none text-black ml-auto w-input"
+          class="p-2 rounded-lg border-none outline-none text-black ml-auto w-fit lg:w-input"
           rules="required|number"
           :value="props.price"
           @input="$emit('update:price', $event.target.value)"

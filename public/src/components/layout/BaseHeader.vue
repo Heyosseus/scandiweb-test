@@ -1,7 +1,7 @@
 <template>
-  <div class="flex justify-between items-center px-4">
+  <div class="flex flex-col md:flex-row justify-between items-center">
     <h1 class="text-4xl text-green-400">Product Add</h1>
-    <div class="flex space-x-8">
+    <div class="flex space-x-8 mt-6 lg:mt-0">
       <button
         class="uppercase py-2 px-4 border border-white rounded-md hover:bg-blue-600 hover:border-0"
         type="submit"

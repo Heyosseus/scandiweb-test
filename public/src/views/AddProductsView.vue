@@ -2,7 +2,10 @@
   <Form @submit="addProduct" class="py-10 px-16">
     <base-header save="save" cancel="cancel" :addProducty="addProduct"></base-header>
     <div class="w-full h-[1px] bg-gray-400 mt-4"></div>
-    <div class="flex justify-between" @submit.prevent>
+    <div
+      class="flex flex-col lg:items-start lg:p-5 lg:flex-row md:justify-between"  
+      @submit.prevent
+    >
       <input-data
         :sku="sku"
         :name="name"
@@ -55,6 +58,7 @@ const height = ref('')
 const width = ref('')
 const length = ref('')
 const selectedProductType = ref('')
+const backendURL = import.meta.env.VITE_PUBLIC_API
 
 const addProduct = async () => {
   const formData = {
@@ -75,7 +79,7 @@ const addProduct = async () => {
   }
 
   await axios
-    .post('http://localhost:3000/api/requests/action.php', formData, {
+    .post(`${backendURL}/api/requests/action.php`, formData, {
       headers: {
         'Content-Type': 'application/json'
       }

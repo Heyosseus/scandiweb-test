@@ -1,11 +1,12 @@
 <template>
-  <div class="py-10 px-20">
-    <div class="flex justify-between items-center px-4">
-      <h1 class="text-4xl text-green-400">Product List</h1>
-      <div class="flex space-x-8">
+  <div class="py-10 px-4 md:px-20">
+    <div class="flex flex-col md:flex-row justify-between items-center">
+      <h1 class="text-4xl text-green-400 mb-4 md:mb-0">Product List</h1>
+
+      <div class="flex md:flex-row md:flex space-y-4 md:space-y-0 space-x-8">
         <router-link
           :to="{ name: 'add-products' }"
-          class="uppercase py-2 px-4 border border-white rounded-md hover:bg-gray-600 hover:border-0 shadow-lg shadow-black"
+          class="uppercase py-2 px-4 border mt-4 md:mt-0 border-white text-center rounded-md hover:bg-gray-600 hover:border-0 shadow-lg shadow-black"
           >add</router-link
         >
         <button
@@ -21,7 +22,7 @@
       <div
         v-for="product in productStore.items"
         :key="product.id"
-        class="w-1/5 ml-16 pb-12 pt-8 bg-gray-600 mt-10 rounded-lg text-xl text-center flex justify-center items-center relative shadow-lg shadow-gray-950"
+        class="w-full md:w-1/5 ml-2 md:ml-16 pb-12 pt-8 bg-gray-600 mt-4 md:mt-10 rounded-lg text-xl text-center flex justify-center items-center relative shadow-lg shadow-gray-950"
       >
         <input
           type="checkbox"
@@ -41,9 +42,11 @@
         </div>
       </div>
     </main>
-    <footer class="fixed w-screen bottom-12">
-      <div class="w-[94%] h-[1px] bg-gray-400 mt-4"></div>
-      <p class="flex justify-center items-center text-lg mt-3 mr-28">Scandiweb Test Assignment</p>
+    <footer class="fixed w-screen bottom-2 md:bottom-8">
+      <div class="w-[94%] h-[1px] bg-gray-400"></div>
+      <p class="flex justify-center items-center text-lg mt-3 md:mr-28">
+        Scandiweb Test Assignment
+      </p>
     </footer>
   </div>
 </template>
@@ -56,12 +59,11 @@ import axios from 'axios'
 const products = ref([])
 const selectedProducts = ref([])
 const productStore = useProductStore()
+const backendURL = import.meta.env.VITE_PUBLIC_API
 
 onMounted(async () => {
   try {
-    const response = await axios.get(
-      'http://localhost:3000/api/requests/all.php?action=getProducts'
-    )
+    const response = await axios.get(`${backendURL}/api/requests/all.php?action=getProducts`)
     products.value = response.data
     productStore.items = response.data
   } catch (error) {
@@ -81,7 +83,7 @@ const deleteSelectedProducts = async () => {
   }
 
   try {
-    await axios.delete('http://localhost:3000/api/requests/action.php', {
+    await axios.delete(`${backendURL}/api/requests/action.php`, {
       data: formData,
       headers: {
         'Content-Type': 'application/json'
