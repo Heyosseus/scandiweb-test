@@ -23,33 +23,36 @@ abstract class RequestHandler
 
     abstract public function handleRequest();
 }
-switch ($_SERVER['REQUEST_METHOD']) {
-    case 'POST':
-        $data = json_decode(file_get_contents('php://input'), true);
-        if (!isset($data['type'])) {
-            echo 'Invalid request. Product type is missing.';
+
+function createRequestHandler(string $requestType, $connection, $corsHandler)
+{
+    switch ($requestType) {
+        case 'Book':
+            return new \requests\products\BookProduct($connection, $corsHandler);
+        case 'DVD':
+            return new \requests\products\DVDProduct($connection, $corsHandler);
+        case 'Furniture':
+            return new \requests\products\FurnitureProduct($connection, $corsHandler);
+        default:
+            echo 'Invalid product type.';
             exit();
-        }
-        switch ($data['type']) {
-            case 'Book':
-                $requestHandler = new \requests\products\BookProduct($connection, $corsHandler);
-                break;
-            case 'DVD':
-                $requestHandler = new \requests\products\DVDProduct($connection, $corsHandler);
-                break;
-            case 'Furniture':
-                $requestHandler = new \requests\products\FurnitureProduct($connection, $corsHandler);
-                break;
-            default:
-                echo 'Invalid product type.';
-                exit();
-        }
-        break;
-    case 'DELETE':
-        $requestHandler = new \requests\crud\DeleteRequestHandler();
-        break;
-    default:
-        echo 'Invalid request method.';
-        exit();
+    }
 }
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $data = json_decode(file_get_contents('php://input'), true);
+
+    if (!isset($data['type'])) {
+        echo 'Invalid request. Product type is missing.';
+        exit();
+    }
+
+    $requestHandler = createRequestHandler($data['type'], $connection, $corsHandler);
+} elseif ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
+    $requestHandler = new \requests\crud\DeleteRequestHandler();
+} else {
+    echo 'Invalid request method.';
+    exit();
+}
+
 $requestHandler->handleRequest();
