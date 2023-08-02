@@ -1,6 +1,9 @@
 <?php
+
 namespace database;
+
 use mysqli;
+
 require_once "DBSettings.php";
 
 class DB extends DatabaseSettings

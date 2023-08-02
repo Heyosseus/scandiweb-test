@@ -13,7 +13,7 @@ class DatabaseSettings
 
         $settings['dbusername'] = 'rati';
 
-        $settings['dbpassword'] = '';
+        $settings['dbpassword'] = '123';
 
         return $settings;
     }
