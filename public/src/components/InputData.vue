@@ -1,6 +1,6 @@
 <template>
   <div class="w-full lg:w-inputs space-y-10 mt-12">
-    <div class="flex">
+    <div class="flex" id="sku">
       <label for="sku">SKU</label>
       <div class="flex flex-col ml-auto">
         <Field
@@ -9,7 +9,7 @@
           id="sku"
           placeholder="sku"
           class="p-2 rounded-lg border-none outline-none text-black ml-auto w-fit lg:w-input uppercase"
-          rules="required|max:15"
+         
           :value="props.sku"
           @input="$emit('update:sku', $event.target.value)"
         />
@@ -17,7 +17,7 @@
       </div>
     </div>
 
-    <div class="flex">
+    <div class="flex" id="name">
       <label for="">Name</label>
       <div class="flex flex-col ml-auto">
         <Field
@@ -26,7 +26,7 @@
           id="name"
           placeholder="name"
           class="p-2 rounded-lg border-none outline-none text-black w-fit lg:w-input"
-          rules="required|max:15"
+      
           :value="props.name"
           @input="$emit('update:name', $event.target.value)"
         />
@@ -34,7 +34,7 @@
       </div>
     </div>
 
-    <div class="flex">
+    <div class="flex" id="price">
       <label for="">Price ($)</label>
       <div class="flex flex-col ml-auto">
         <Field
@@ -43,7 +43,7 @@
           id="price"
           placeholder="price"
           class="p-2 rounded-lg border-none outline-none text-black ml-auto w-fit lg:w-input"
-          rules="required|number"
+       
           :value="props.price"
           @input="$emit('update:price', $event.target.value)"
         />
@@ -59,14 +59,14 @@
         class="ml-10 p-2 bg-transparent"
         :value="props.selectedProductType"
         @input="$emit('update:selectedProductType', $event.target.value)"
-        rules="required"
+        
       >
         <option value="" disabled class="bg-primary text-white">Select product type</option>
         <option value="DVD" class="bg-primary text-white">DVD</option>
         <option value="Book" class="bg-primary text-white">Book</option>
         <option value="Furniture" class="bg-primary text-white">Furniture</option>
       </Field>
-      <ErrorMessage name="selector" class="text-sm text-red-600 mt-2 ml-6" />
+      <ErrorMessage name="selector" class="text-sm text-red-600 mt-2 lg:ml-6" />
     </div>
   </div>
 </template>

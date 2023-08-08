@@ -1,11 +1,15 @@
 <template>
-  <Form @submit="addProduct" class="py-10 px-16">
-    <base-header save="save" cancel="cancel" :addProducty="addProduct"></base-header>
-    <div class="w-full h-[1px] bg-gray-400 mt-4"></div>
+  <Form @submit="addProduct" class="py-10 px-6   lg:px-16" id="product_form">
+    <base-header save="Save" cancel="Cancel" :addProduct="addProduct"></base-header>
     <div
-      class="flex flex-col lg:items-start lg:p-5 lg:flex-row md:justify-between"  
-      @submit.prevent
+      v-if="alreadyExist"
+      class="px-5 py-3 bg-red-500 text-center absolute bottom-24 left-20 rounded-lg cursor-pointer text-lg"
+      @click="alreadyExist = false"
     >
+      SKU name is already exists
+    </div>
+    <div class="w-full h-[1px] bg-gray-400 mt-4"></div>
+    <div class="flex flex-col lg:items-start lg:p-5 lg:flex-row md:justify-between" @submit.prevent>
       <input-data
         :sku="sku"
         :name="name"
@@ -32,22 +36,20 @@
       ></product-types>
     </div>
 
-    <footer class="fixed w-full bottom-12">
-      <div class="w-[94%] h-[1px] bg-gray-400 mt-4"></div>
-      <p class="flex justify-center items-center text-lg mt-2">Scandiweb Test Assignment</p>
-    </footer>
+    <BaseFooter />
   </Form>
 </template>
 <script setup>
 import { Form } from 'vee-validate'
 import BaseHeader from '@/components/layout/BaseHeader.vue'
+import BaseFooter from '@/components/layout/BaseFooter.vue'
 import InputData from '@/components/InputData.vue'
 import ProductTypes from '@/components/ProductTypes.vue'
-
+// import AxiosInstance from '@/config/index.js'
+import axios from 'axios'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import axios from 'axios'
-
+const backendURL = import.meta.env.VITE_PUBLIC_API
 const router = useRouter()
 const sku = ref('')
 const name = ref('')
@@ -58,7 +60,7 @@ const height = ref('')
 const width = ref('')
 const length = ref('')
 const selectedProductType = ref('')
-const backendURL = import.meta.env.VITE_PUBLIC_API
+const alreadyExist = ref(false)
 
 const addProduct = async () => {
   const formData = {
@@ -79,17 +81,17 @@ const addProduct = async () => {
   }
 
   await axios
-    .post(`${backendURL}/api/requests/action.php`, formData, {
-      headers: {
-        'Content-Type': 'application/json'
-      }
+    .post(`${backendURL}/requests/action.php`, formData, {
+      withCredentials: false
     })
     .then(() => {
       console.log(formData)
       router.push({ name: 'home' })
     })
     .catch((error) => {
-      console.error(error.response)
+      if (error.response && error.response.status === 500) {
+        alreadyExist.value = true
+      }
     })
 }
 </script>

@@ -13,6 +13,16 @@ export default mergeConfig(
       transformMode: {
         web: [/\.[jt]sx$/]
       }
-    }
+    },
+    // server: {
+    //   proxy: {
+    //     '/api': {
+    //       target: 'https://scanditestassignment.000webhostapp.com',
+    //       changeOrigin: true,
+    //       secure: false,
+    //       rewrite: (path) => path.replace(/^\/api/, '')
+    //     }
+    //   }
+    // }
   })
 )
