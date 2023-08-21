@@ -5,12 +5,14 @@
       <button
         class="uppercase py-2 px-4 border border-white rounded-md hover:bg-blue-600 hover:border-0"
         type="submit"
+        id="save-product-btn"
       >
         {{ props.save }}
       </button>
       <router-link
         :to="{ name: 'home' }"
         class="uppercase py-2 px-4 border border-white rounded-md hover:bg-gray-600 hover:border-0"
+        id="cancel-product-btn"
         >{{ props.cancel }}</router-link
       >
     </div>
