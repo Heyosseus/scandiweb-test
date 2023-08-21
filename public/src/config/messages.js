@@ -7,7 +7,7 @@ configure({
     en: {
       messages: {
         required: 'This field is required',
-        max: 'This field must be less than 15 characters'
+        max: 'This field must be less than 5 characters'
       }
     }
   })
