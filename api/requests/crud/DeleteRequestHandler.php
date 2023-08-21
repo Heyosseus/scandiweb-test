@@ -17,9 +17,15 @@ class DeleteRequestHandler extends RequestHandler
             $productIdList = implode(',', $productIds);
             $sql = "DELETE FROM `products` WHERE `id` IN ($productIdList)";
 
-            $data = $this->connection->link->query($sql);
+            $result = $this->connection->link->query($sql);
 
-            return $data;
+            if ($result) {
+                echo 'Products deleted successfully.';
+            } else {
+                echo 'Error while deleting products.';
+            }
+        } else {
+            echo 'Invalid request.';
         }
 
         $this->connection->close();

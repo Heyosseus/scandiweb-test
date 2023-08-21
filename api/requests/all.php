@@ -2,11 +2,6 @@
 
 namespace requests\all;
 
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-ini_set('log_errors', 1);
-ini_set('error_log', '/path/to/error_log.txt');
-
 require_once "../config/autoloader.php";
 use cors\CorsHandler;
 use database\DB;

@@ -1,8 +1,6 @@
 <?php
 
 namespace requests;
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 require_once "../config/autoloader.php";
 
@@ -30,7 +28,7 @@ function createRequestHandler(string $requestType, $connection, $corsHandler)
         case 'Book':
             return new \requests\products\BookProduct($connection, $corsHandler);
         case 'DVD':
-            return new \requests\products\DVDProduct($connection, $corsHandler);
+            return new \requests\products\DVDProduct($connection,   $corsHandler);
         case 'Furniture':
             return new \requests\products\FurnitureProduct($connection, $corsHandler);
         default:
@@ -45,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!isset($data['type'])) {
         echo 'Invalid request. Product type is missing.';
         exit();
-    }
+    }   
 
     $requestHandler = createRequestHandler($data['type'], $connection, $corsHandler);
 } elseif ($_SERVER['REQUEST_METHOD'] === 'DELETE') {

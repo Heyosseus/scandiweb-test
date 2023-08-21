@@ -21,7 +21,7 @@ abstract class CreateRequestHandler extends RequestHandler
             $type = $this->getProductType();
 
             $productAttributes = $this->getProductAttributes($data);
-
+                        
             $sql = "INSERT INTO `products` (`sku`, `name`, `price`, `type`, ";
             $values = "VALUES ('$sku', '$name', '$price', '$type', ";
 
