@@ -8,13 +8,13 @@
           <router-link
             :to="{ name: 'add-products' }"
             class="uppercase py-2 px-4 border mt-4 md:mt-0 border-white text-center rounded-md hover:bg-gray-600 hover:border-0 shadow-lg shadow-black"
-            id="ADD"
+            id="add-product-btn"
             >ADD</router-link
           >
           <button
             class="uppercase py-2 px-4 border border-white rounded-md hover:bg-red-700 hover:border-0 shadow-lg shadow-black"
             @click="deleteSelectedProducts"
-            id="MASS_DELETE"
+            id="delete-product-btn"
           >
             MASS DELETE
           </button>
@@ -29,6 +29,7 @@
         >
           <input
             type="checkbox"
+            name="delete-checkbox"
             class="absolute top-4 left-4 w-5 h-5 cursor-pointer delete-checkbox"
             v-model="selectedProducts"
             :value="product.id"
@@ -37,9 +38,11 @@
             <p class="uppercase">{{ product.sku }}</p>
             <p>{{ product.name }}</p>
             <p>{{ product.price }}$</p>
-            <span v-show="product.size" class="italic">Size: {{ product.size }}MB</span>
-            <span v-show="product.weight" class="italic">Weight: {{ product.weight }}KG</span>
-            <span v-show="product.dimensions" class="italic"
+            <span v-show="product.size" class="italic" id="size">Size: {{ product.size }}MB</span>
+            <span v-show="product.weight" class="italic" id="weight"
+              >Weight: {{ product.weight }}KG</span
+            >
+            <span v-show="product.dimensions" class="italic" id="dimensions"
               >Dimensions: {{ getFormattedDimensions(product.dimensions) }}</span
             >
           </div>
@@ -55,7 +58,6 @@ import { ref, onMounted } from 'vue'
 import { useProductStore } from '@/stores/products'
 import { getFormattedDimensions } from '@/utils/helper.js'
 import axios from 'axios'
-// import AxiosInstace from '@/config/index.js'
 const products = ref([])
 const selectedProducts = ref([])
 const productStore = useProductStore()
@@ -86,7 +88,7 @@ const deleteSelectedProducts = async () => {
   }
 
   try {
-    const response = await axios.post(`${backendURL}/requests/action.php`, {
+    const response = await axios.delete(`${backendURL}/requests/action.php`, {
       data: formData,
       withCredentials: false
     })
