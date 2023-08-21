@@ -8,8 +8,9 @@ class CorsHandler
     {
         if (isset($_SERVER['HTTP_ORIGIN'])) {
             header('Access-Control-Allow-Origin: *');
-            header('Access-Control-Allow-Credentials: true');
+            header('Access-Control-Allow-Credentials: false');
             header('Access-Control-Max-Age: 1000');
+            header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With');
         }
 
         if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
@@ -18,7 +19,7 @@ class CorsHandler
             }
 
             if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS'])) {
-                header("Access-Control-Allow-Headers: Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization");
+                header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
             }
             exit(0);
         }
